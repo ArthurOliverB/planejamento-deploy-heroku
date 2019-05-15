@@ -1,7 +1,7 @@
 const app = require('express')()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-
+const cors = require('cors')
 // Routes
 const task = require('./routes/task.route')
 
@@ -11,15 +11,14 @@ let db = mongoose.connection
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log("Conexão bem sucedida");
 });
-
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/tasks', task)
 
 
-const porta = 3000
+const porta = 4000
 app.listen(porta, function() {
     console.log(`Backend rodando na porta ${porta}`);
 })

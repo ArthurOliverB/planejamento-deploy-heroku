@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 
 const TaskSchema = new mongoose.Schema({
     name: {type: String, required: true, max: 140},
+    note: {type: String, required: true, max: 140},
     prio: {type: String, required: true, max: 2}
 })
 

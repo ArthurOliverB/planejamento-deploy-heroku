@@ -9,7 +9,6 @@ exports.tasks = function (req, res) {
 exports.task = function (req, res) {
 
     Task.findById(req.params.id, function (err, task) {
-        console.log(task);
 
         res.send(task)
     })
@@ -20,7 +19,6 @@ exports.saveTask = function (req, res) {
     // update
     if (req.params.id) {
         
-        console.log(req.params.id);
         
         
         Task.findByIdAndUpdate(req.params.id, {$set: req.body}, {
@@ -30,26 +28,20 @@ exports.saveTask = function (req, res) {
             res.send('Task atualizada.');
         })
 
-        // Task.findById(req.params.id, function(err, task) {
-        //     if(err) console.error(err)
-        //     task.name = req.body.name
-        //     task.prio = req.body.prio
-        //     task.save((err, task) => {
-        //         if(err) console.error(err)
-        //         res.send(task)
-        //     })
-        // })
-    } else {
-        const { name, prio } = body
+        
+    } else {        
+        const  name = req.body.name
+        const  note = req.body.note
+        const  prio = req.body.prio
+
         const t1 = new Task({
             name,
+            note,
             prio
         })
-
+        
         t1.save(function (err, t1) {
-            if (err) console.err(er)
-            console.log(t1.name)
-            console.log(t1.prio)
+            if (err) console.error(err)
         })
         res.send(t1)
     }
@@ -58,7 +50,6 @@ exports.saveTask = function (req, res) {
 exports.deleteTask = function (req, res) {
     const id = req.params.id
     const query = {id}
-    console.log(id);
     
     Task.findByIdAndRemove(req.params.id, {useFindAndModify: false}, function (err) {
         if (err) return next(err);
