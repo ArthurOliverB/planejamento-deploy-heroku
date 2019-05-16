@@ -1,74 +1,112 @@
-.card {
-    /* Sizing */
-    height: 90px;
-    width: 250px;
-    border-radius: 16px;
-
-    background-color: #fff;
-
-    /* Shadow */
-    -moz-box-shadow: -7px 7px 5px -5px #ccc;
-    -webkit-box-shadow: -7px 7px 5px -5px #ccc;
-    box-shadow: -7px 7px 5px -5px #ccc;
-
-    /* Display */
+.card-container {
+    height: 140px;
+    width: 300px;
+    background-color:#fff;
+    border-radius: 15px;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
+
+    margin-bottom: 16px;
     transition: all .2s ease-in-out;
 }
-.card:hover {
-    transform: scale(1.050);
-}
-.card.editable:hover {
-    transform: scale(1);
+
+.card-container:hover {
+    height: 140px;
+    width: 300px;
+    background-color:#fff;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    transform: scale(1.05)
 }
 
-.content {
-    margin-left: 30px;
-}
-
-.content .title {
-    font-weight: 700;
-    color: #2F5081
-}
-
-.content input.title {
-    border: none;
-    width: 100%;
-    font-size: 16px;
-}
-
-.content .subtitle {
-    font-weight: 400;
-    color: #9EA5AF;
-    font-size: 16px;
-}
-
-.content input.subtitle {
-    border: none
-}
 .tag {
     height: 100%;
-    width: 8%;
-    border-radius: 16px 0px 0px 16px;
-    -moz-border-radius: 16px 0px 0px 16px;
-    -webkit-border-radius: 16px 0px 0px 16px;
+    width: 4%;
+    border-radius: 15px 0px 0px 15px;
+    -moz-border-radius: 15px 0px 0px 15px;
+    -webkit-border-radius: 15px 0px 0px 15px;
     border: 0px solid #000000;
 }
 
-.tag.editable {
+.card-info {
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+    justify-content: center;
+}
+
+.card-header > input, .card-header.editable > input{
+    font-weight: 700;
+    font-size: 24px;
+    color: #2F5081
+}
+.card-content > input, .card-content.editable > input {
+    color: #9EA5AF;
+}
+
+.header-wrapper, .header-wrapper.editable {
+    display: flex;
+    height: 50%;
+}
+input {
+    margin-top: 20px;
+}  
+
+.content-wrapper, .content-wrapper.editable {
+    display: flex;
+    height: 50%;
+}
+
+.card-actions {
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-actions {
+    padding: 16px 0px 16px 0px;
+}
+.card-actions button {
+    border: none;
+    background-color: transparent;
+    height: 32px;
+    width: 32px;
+    background-position: 50%;        
     height: 100%;
-    width: 16%;
-    border-radius: 16px 0px 0px 16px;
-    -moz-border-radius: 16px 0px 0px 16px;
-    -webkit-border-radius: 16px 0px 0px 16px;
-    border: 0px solid #000000;
+    background-repeat: no-repeat;
+    transition: all .2s ease-in-out;  
+}
+
+.card-actions button:hover {
+    border: none;
+    background-color: transparent;
+    background-position: 50%;
+
+}
+
+.done {
+    background-image: url('../assets/plus-i.png');
+}
+.done:hover {
+    background-image: url('../assets/plus-a.png');
+}
+.edit {
+    background-image: url('../assets/pencil-i.png');
+}
+.edit:hover {
+    background-image: url('../assets/pencil-a.png');
+}
+.delete {
+    background-image: url('../assets/cancel-i.png');
+}
+.delete:hover {
+    background-image: url('../assets/cancel-a.png');
 }
 
 .success {
-    background-color: #51D888;            
+background-color: #51D888;            
 }
 .warning {
     background-color: #FFBE3D;
@@ -80,43 +118,34 @@
     background-color: #0F51F5;
 }
 
-.card.editable {
-    /* Sizing */
-    height: 90px;
-    width: 250px;
-    border-radius: 16px;
 
-    background-color: #fff;
 
-    /* Shadow */
-    -moz-box-shadow: -7px 7px 5px -5px #ccc;
-    -webkit-box-shadow: -7px 7px 5px -5px #ccc;
-    box-shadow: -7px 7px 5px -5px #ccc;
 
-    /* Display */
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    transition: all .2s ease-in-out;
+
+
+
+
+
+
+input {
+    border: none;
+    outline: none
 }
 
+input.title {
+    font-size: 20px;
+    width: 80%;
+}
 input.subtitle {
-    margin-top: 13px;
+    font-size: 16px;
+    width: 100%;
 }
 
-.card-container {
-    display: flex;
-}
 
-img {
-    height: 38px;
-}
 button {
     border: none;
     background-color: transparent;
     transition: all .2s ease-in-out;  
-    align-self: flex-start;
-    margin-top: 5px;
     outline: none;
 }
 
