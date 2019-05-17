@@ -15,9 +15,25 @@ class App extends React.Component {
   handleNewTask = (task) => {
     // (this);
     const auxTasks = [ ...this.state.tasks ]
+    
     auxTasks.unshift(task)
+    
+    console.log(auxTasks);
+    
     this.setState({ tasks: auxTasks })
   }
+  
+  handleDeleteTask = (id) => {
+    const auxTasks = this.state.tasks.filter(task => {
+      return task._id != id
+    })
+    
+    console.log(auxTasks);
+    
+    
+    this.setState({tasks:auxTasks})
+  }
+
   fetchTasks() {
     const url = 'http://localhost:4000/tasks'
 
@@ -30,21 +46,23 @@ class App extends React.Component {
       this.setState({tasks: [...response.data].reverse()})      
     })
   }
-  itemsComponents() {
-    
+  itemsComponents() {    
     const items = this.state.tasks.map((task, index) => {
       
       return (
-          <Card key={index} status={task.prio} name={task.name} note={task.note} editable="false"></Card>
+          <div className="animated bounceInLeft faster" key={task._id}>
+            <Card id= {task._id} status={task.prio} name={task.name} note={task.note} editable="false" onDeleteTask = {this.handleDeleteTask}></Card>
+          </div>
       )
     })
     return (
-      <div className="animated fadeIn">
+      <div>
         {items}
       </div>
     )
   }
   render() {
+    
     return (
       <div className="App">
         <div className="todo">
@@ -53,7 +71,7 @@ class App extends React.Component {
               <h2>Hoje</h2>
             </div>
           </div>
-          <Card name="Nova Tarefa" note="Notas sobre a tarefa" editable= {true} onPostTask = {this.handleNewTask}></Card>
+          <Card name="" note="" editable= {true} onPostTask = {this.handleNewTask}></Card>
           {this.itemsComponents()}
         </div>
       </div>

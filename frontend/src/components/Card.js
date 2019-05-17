@@ -6,15 +6,15 @@ import plus from '../assets/plus.png'
 import axios from 'axios'
 class Card extends React.Component {
     
-    
-
     constructor() {
         super()
         
         this.state = {
+            id: '',
             name: '',
             note: '', 
-            prio: ''
+            prio: '',
+            editable: ''
         }
         this.handleNameChange = this.handleNameChange.bind(this)
         this.handleNoteChange = this.handleNoteChange.bind(this)
@@ -22,11 +22,11 @@ class Card extends React.Component {
 
    componentWillMount() {
        this.setState({
+            id: this.props.id,
             name: this.props.name,
             note: this.props.note, 
             prio: this.props.status
-       })
-       
+       })       
    }
 
     handleNameChange(e) {
@@ -44,27 +44,27 @@ class Card extends React.Component {
         
         return (
             <div className="static">
-                <div className="card-container editable">
-                    <div className="tag event editable" onClick={e => this.changeClass(e)}></div>
+                <div className="card-container static editable">
+                    <div className="tag event editable" onClick={e => this.changeClass(e, false)}></div>
                     <div className="card-info">
                         <div className="header-wrapper editable">
                             <div className="card-header editable">
-                        <input className="input title" placeholder = "Nova tarefa" value={this.state.name} onChange={this.handleNameChange} />                                
+                                <input className="input title" placeholder="Nova tarefa" value={this.state.name} onChange={this.handleNameChange} />
                             </div>
                         </div>
                         <div className="content-wrapper editable">
                             <div className="card-content editable">
-                        <input className="input subtitle" placeholder = "Notas" value={this.state.note} onChange={this.handleNoteChange}/>
-                                
+                                <input className="input subtitle" placeholder="Notas" value={this.state.note} onChange={this.handleNoteChange} />
+
                             </div>
                         </div>
                     </div>
                     <div className="card-actions">
-                    <button className="done" onClick={e => this.animateButton(e)}>
-                    </button>
-                       
+                        <button className="done" onClick={e => this.animateButton(e)}>
+                        </button>
+
                     </div>
-            </div>
+                </div>
             </div> 
         )
     }
@@ -79,8 +79,10 @@ class Card extends React.Component {
             element.removeEventListener('animationend', handleAnimationEnd)
         }
         element.addEventListener('animationend', handleAnimationEnd)
-
-        if(this.state.prio!== '' && this.state.name!== '' && this.state.note!=='') {
+        console.log(this.state.prio);
+        
+        if((this.state.prio !== '' && this.state.prio != undefined) && this.state.name!== '' && this.state.note!=='') {
+            
             this.postNewTask()
             this.reset(e)
         } else {
@@ -90,7 +92,7 @@ class Card extends React.Component {
     reset(e) {
         let element = document.querySelectorAll("div[class^=tag]")[0]
         
-        element.className = 'tag editable event' 
+        element.className = 'tag event editable' 
 
         this.setState({
             name: '',
@@ -108,44 +110,48 @@ class Card extends React.Component {
             this.props.onPostTask(resp.data)
         })
     }
+    // [[TODO]]
+    deleteTask() {
+        const deletedId = this.state.id
+        console.log("Card: " + this.state.name);
+        
+        axios.delete('http://localhost:4000/tasks/' + deletedId).then(resp => {
+            this.props.onDeleteTask(deletedId)
+        })
+    }
 
-    changeClass(e) {
-
+    changeClass(e, staticEditing) {
 
         let element = e.target
 
         let className = element.className.split(' ')[1]
         let elementClass = ''
-
-        
+        let taskPrio = ''
         if(element.className.split(' ')[2] === 'editable') {
-            switch(className) {
+            switch (className) {
                 case 'success':
                     elementClass = 'warning'
-                    this.setState({
-                        prio: 'm'
-                    })
+                    taskPrio = 'm'
                     break
-                case 'warning': 
-                    elementClass= 'failure'
-                    this.setState({
-                        prio: 'h'
-                    })
+                case 'warning':
+                    elementClass = 'failure'
+                    taskPrio = 'h'
                     break
-                case 'failure': 
+                case 'failure':
                     elementClass = 'success'
-                    this.setState({
-                        prio: 'b'
-                    })
+                    taskPrio = 'b'
                     break
                 default:
                     elementClass = 'success'
-                    this.setState({
-                        prio: 'b'
-                    })
+                    taskPrio = 'b'
                     break
             }
             element.className = 'tag ' + elementClass + ' editable'
+            
+            this.setState({
+                prio: taskPrio,
+                editable: staticEditing? true : false
+            })
         }
     }
 
@@ -159,31 +165,45 @@ class Card extends React.Component {
         } else {
             status = 'success'
         }
-
+        const editable = this.state.editable? ' editable' : ''
+        const tagClassName = 'tag ' + status + editable
+        
         return (
             <div className="card-container">
-                <div className={'tag ' + status} onClick={e => this.changeClass(e)}> </div>
+                <div className={tagClassName} onClick={e => this.changeClass(e, true)}> </div>
                 <div className="card-info">
                     <div className="header-wrapper">
                         <div className="card-header">
-                        <input className="dynamic input title" placeholder = "Nova tarefa" value={this.state.name} onChange={this.handleNameChange} readOnly/>
+                        <input className="input title" placeholder = "Nova tarefa" value={this.state.name} onChange={this.handleNameChange} readOnly/>
                         </div>
                     </div>
                     <div className="content-wrapper">
                         <div className="card-content">
-                            <input className=" dynamic input subtitle" placeholder = "Notas" value={this.state.note} onChange={this.handleNoteChange} readOnly/>
+                            <input className="input subtitle" placeholder = "Notas" value={this.state.note} onChange={this.handleNoteChange} readOnly/>
                         </div>
                     </div>
                 </div>
                 <div className="card-actions">
                     <button className="done"></button>
                     <button className="edit" onClick={ e => this.makeEditable(e)}></button>
-                    <button className="delete"></button>
+                    <button className="delete" onClick={e => this.deleteTask(e)}></button>
                 </div>
             </div>
         )
     }
 
+    updateTask(id) {
+        axios.put('http://localhost:4000/tasks/' + id, {
+            name: this.state.name,
+            note: this.state.note,
+            prio: this.state.prio
+        }).then(response => {
+            this.setState({
+                ...response.data
+            })
+            
+        })
+    }
     makeEditable(e) {
         let parentDiv = e.target.parentNode.parentNode
         let className = parentDiv.classList[1]
@@ -191,17 +211,23 @@ class Card extends React.Component {
         let note = parentDiv.children[1].children[1].children[0].children[0]
         let tag = parentDiv.children[0]
 
+        
+        
         if(className) {
             parentDiv.className = 'card-container'
             title.readOnly = true
             note.readOnly = true
             // VERIFICAR
-            tag.className.split(' ')[2] = ''           
+            
+            tag.className = tag.className.split(' editable')[0]
+            
+            this.updateTask(this.state.id)
         } else {
             parentDiv.className = 'card-container editable'
             title.readOnly = false
             note.readOnly = false
             tag.className += ' editable'
+
         }
     }
     render() {

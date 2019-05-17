@@ -16,16 +16,22 @@ exports.task = function (req, res) {
 
 exports.saveTask = function (req, res) {
     const { body } = req
+    
     // update
     if (req.params.id) {
-        
-        
         
         Task.findByIdAndUpdate(req.params.id, {$set: req.body}, {
             useFindAndModify: false
         }, function (err, product) {
-            if (err) return next(err);
-            res.send('Task atualizada.');
+            if (err) {
+                console.log(err);
+                
+            }
+
+            Task.findById(req.params.id, function (err, task) {
+
+                res.send(task)
+            })
         })
 
         
@@ -50,6 +56,7 @@ exports.saveTask = function (req, res) {
 exports.deleteTask = function (req, res) {
     const id = req.params.id
     const query = {id}
+    console.log(query);
     
     Task.findByIdAndRemove(req.params.id, {useFindAndModify: false}, function (err) {
         if (err) return next(err);
