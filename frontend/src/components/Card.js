@@ -2,7 +2,7 @@ import React from 'react';
 import animate from 'animate.css'
 import './Card.css';
 import plus from '../assets/plus.png'
-
+import baseUrl from '../config/config.js'
 import axios from 'axios'
 class Card extends React.Component {
     
@@ -102,7 +102,7 @@ class Card extends React.Component {
     }
     postNewTask() {
                 
-        axios.post('http://localhost:4000/tasks', {
+        axios.post( baseUrl, {
             name: this.state.name,
             note: this.state.note,
             prio: this.state.prio
@@ -115,7 +115,7 @@ class Card extends React.Component {
         const deletedId = this.state.id
         console.log("Card: " + this.state.name);
         
-        axios.delete('http://localhost:4000/tasks/' + deletedId).then(resp => {
+        axios.delete(baseUrl +`/${deletedId}`).then(resp => {
             this.props.onDeleteTask(deletedId)
         })
     }
@@ -193,7 +193,7 @@ class Card extends React.Component {
     }
 
     updateTask(id) {
-        axios.put('http://localhost:4000/tasks/' + id, {
+        axios.put(baseUrl + `/${id}`, {
             name: this.state.name,
             note: this.state.note,
             prio: this.state.prio

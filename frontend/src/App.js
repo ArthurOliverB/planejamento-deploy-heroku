@@ -4,9 +4,11 @@ import './components/Card.css';
 import axios from 'axios'
 import Card from './components/Card'
 import animate from 'animate.css'
+import baseUrl from './config/config.js'
 class App extends React.Component {
 
   constructor() {
+    
     super()
     this.state = {
       tasks: []
@@ -35,9 +37,8 @@ class App extends React.Component {
   }
 
   fetchTasks() {
-    const url = 'http://localhost:4000/tasks'
 
-    return axios.get(url)
+    return axios.get(baseUrl)
   }
 
   componentWillMount() {
