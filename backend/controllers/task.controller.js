@@ -56,7 +56,6 @@ exports.saveTask = function (req, res) {
 exports.deleteTask = function (req, res) {
     const id = req.params.id
     const query = {id}
-    console.log(query);
     
     Task.findByIdAndRemove(req.params.id, {useFindAndModify: false}, function (err) {
         if (err) return next(err);
